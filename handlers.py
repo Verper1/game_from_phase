@@ -1,3 +1,10 @@
+"""
+Audio callback handlers for voice recognition.
+
+This module contains the callback function that processes audio input
+and triggers game launch when the configured phrase is detected.
+"""
+
 from json import loads
 from subprocess import Popen
 
@@ -7,6 +14,23 @@ from config import rec, trigger_phase, steam_path, game_id, state
 
 
 def callback(indata, frames, time, status):
+    """
+    Audio input callback function for processing voice recognition.
+
+    This function is called continuously by the audio input stream.
+    It processes audio chunks, performs speech recognition, and launches
+    the game when the trigger phrase is detected.
+
+    Args:
+        indata: Input audio data as a numpy array
+        frames: Number of frames in the input buffer
+        time: Current time information (CFFI structure)
+        status: Status flags indicating any errors or warnings
+
+    Raises:
+        CallbackStop: Raised when the trigger phrase is detected to stop
+                     the audio stream gracefully.
+    """
     if status:
         print(status)
     if rec.AcceptWaveform(bytes(indata)):
